@@ -13,7 +13,7 @@ API_KEY = os.environ.get("OPENWEATHERMAP_API_KEY")
 
 @app.route("/api/weather/<string:city>")
 def get_weather(city):
-    url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric&lang=ja"
     response = requests.get(url)
     if response.status_code == 404:
         return jsonify({"error": "City not found"}), 404
@@ -23,7 +23,7 @@ def get_weather(city):
 
 @app.route("/api/hourly_weather/<string:city>")
 def get_hourly_weather(city):
-    url = f"http://api.openweathermap.org/data/2.5/forecast?q={city}&appid={API_KEY}&units=metric"
+    url = f"http://api.openweathermap.org/data/2.5/forecast?q={city}&appid={API_KEY}&units=metric&lang=ja"
     response = requests.get(url)
     if response.status_code == 404:
         return jsonify({"error": "City not found"}), 404

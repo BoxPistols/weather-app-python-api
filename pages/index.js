@@ -23,6 +23,7 @@ export default function Home() {
     }
   }
 
+  // 時間
   async function fetchHourlyWeather() {
     try {
       const response = await axios.get(`http://localhost:8080/api/hourly_weather/${city}`);
@@ -38,11 +39,12 @@ export default function Home() {
     }
   }
 
+  // 曜日
   function getJapaneseWeekday(date) {
     const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
     return weekdays[date.getDay()];
   }
-
+  // 日付
   function groupHourlyWeatherByDate(hourlyWeatherData) {
     return hourlyWeatherData.reduce((groups, forecast) => {
       const date = new Date(forecast.dt * 1000).toLocaleDateString();
@@ -52,6 +54,13 @@ export default function Home() {
       groups[date].push(forecast);
       return groups;
     }, {});
+  }
+
+  // 現在
+  function isTimeCloseToNow(time, minutesThreshold = 30) {
+    const now = new Date();
+    const timeDifference = Math.abs(now - time);
+    return timeDifference <= minutesThreshold * 60 * 1000;
   }
 
   return (
@@ -73,8 +82,8 @@ export default function Home() {
       {weatherData && (
         <div>
           <h2>{weatherData.name}</h2>
-          <p>Temperature: {weatherData.main.temp}°C</p>
-          <p>Weather: {weatherData.weather[0].description}</p>
+          <p>温度: {weatherData.main.temp}°C</p>
+          <p>天気: {weatherData.weather[0].description}</p>
         </div>
       )}
       {hourlyWeatherData && (
@@ -87,9 +96,15 @@ export default function Home() {
               </h3>
               <ul>
                 {forecasts.map((forecast, index) => (
-                  <li key={index}>
+                  <li
+                    key={index}
+                    style={{
+                      color: isTimeCloseToNow(new Date(forecast.dt * 1000)) ? "red" : "inherit",
+                    }}
+                  >
                     {new Date(forecast.dt * 1000).toLocaleTimeString()} - {forecast.main.temp}°C - {forecast.weather[0].description}
                   </li>
+
                 ))}
               </ul>
             </div>
