@@ -15,6 +15,10 @@ API_KEY = os.environ.get("OPENWEATHERMAP_API_KEY")
 def get_weather(city):
     url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
     response = requests.get(url)
+    if response.status_code == 404:
+        return jsonify({"error": "City not found"}), 404
+    elif response.status_code != 200:
+        return jsonify({"error": "Failed to fetch weather data"}), response.status_code
     return jsonify(response.json())
 
 if __name__ == "__main__":
