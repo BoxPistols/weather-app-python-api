@@ -21,5 +21,16 @@ def get_weather(city):
         return jsonify({"error": "Failed to fetch weather data"}), response.status_code
     return jsonify(response.json())
 
+@app.route("/api/hourly_weather/<string:city>")
+def get_hourly_weather(city):
+    url = f"http://api.openweathermap.org/data/2.5/forecast?q={city}&appid={API_KEY}&units=metric"
+    response = requests.get(url)
+    if response.status_code == 404:
+        return jsonify({"error": "City not found"}), 404
+    elif response.status_code != 200:
+        return jsonify({"error": "Failed to fetch weather data"}), response.status_code
+    return jsonify(response.json())
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+
