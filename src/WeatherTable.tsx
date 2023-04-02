@@ -40,6 +40,7 @@ export default function WeatherTable() {
   const [error, setError] = useState<string | null>(null)
 
   async function fetchWeather() {
+    setWeatherData(null) // Add this line
     try {
       const response = await axios.get(
         `http://localhost:8080/api/weather/${city}`
@@ -58,6 +59,7 @@ export default function WeatherTable() {
 
   // 時間
   async function fetchHourlyWeather() {
+    setHourlyWeatherData(null) // Add this line
     try {
       const response = await axios.get(
         `http://localhost:8080/api/hourly_weather/${city}`
