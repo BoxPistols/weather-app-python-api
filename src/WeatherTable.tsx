@@ -26,6 +26,11 @@ interface HourlyWeatherData {
   ]
 }
 
+interface GroupedHourlyWeatherData {
+  [date: string]: HourlyWeatherData[]
+}
+
+
 export default function WeatherTable() {
   const [city, setCity] = useState<string>("")
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null)
@@ -75,7 +80,9 @@ export default function WeatherTable() {
     return weekdays[date.getDay()]
   }
   // 日付
-  function groupHourlyWeatherByDate(hourlyWeatherData: HourlyWeatherData[]) {
+  function groupHourlyWeatherByDate(
+    hourlyWeatherData: HourlyWeatherData[]
+  ): GroupedHourlyWeatherData {
     return hourlyWeatherData.reduce((groups, forecast) => {
       const date = new Date(forecast.dt * 1000).toLocaleDateString()
       if (!groups[date]) {
